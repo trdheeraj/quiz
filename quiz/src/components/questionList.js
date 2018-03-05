@@ -21,8 +21,8 @@ class QuestionList extends Component {
       <ol>
         {this.props.question_list.map(question_list => (
           <div>
-            <li onClick={() => this.handler(question_list.id)} key={question_list.id}>{question_list.text}</li>
-            <button onClick={() => this.handleRemove(question_list.id)} className="small">-</button>
+            <li style={{'text-align': 'left'}} onClick={() => this.handler(question_list.id)} key={question_list.id}>{question_list.text}</li>
+            <button style={{'text-align': 'right'}} onClick={() => this.handleRemove(question_list.id)} className="small">-</button>
           </div>
         ))}
       </ol>
