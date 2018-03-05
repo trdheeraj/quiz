@@ -3,6 +3,7 @@ import OptionsDisplay from './optionsDisplay';
 import OptionAddition from './optionAddition';
 import QuestionUpdation from './questionUpdation';
 
+// Module is to display the question and answer options for the selected question
 class ViewQuestionDesign extends Component {
   constructor(props) {
     super(props);

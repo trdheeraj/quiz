@@ -61,11 +61,16 @@ form button:disabled {
 form button.small {
   display: inline-block;
   width: auto;
-  padding: 0 20px;
   background-color: #777;
   font-size: 14px;
+  margin-top: -25px;
 }
 
 form button.small:hover {
   background-color: #999;
+}
+
+li:hover {
+ color: #669509;
+ cursor: pointer;
 }
