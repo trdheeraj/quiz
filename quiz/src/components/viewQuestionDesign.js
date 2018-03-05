@@ -54,9 +54,11 @@ class ViewQuestionDesign extends Component {
       option_id = {this.handleChange}
       delete_options = {this.handleOptionDeletion}
     />
-    var display_question = this.props.question_operation === 'view' ?  question_addition : '';
-    var display_options = this.props.options_operation === 'view' ?  options_addition : '';
-    var list_options = this.props.options_length === 0 ?  '' : options_list;
+    if(this.props.question_list.length > 0){
+      var display_question = this.props.question_operation === 'view' ?  question_addition : '';
+      var display_options = this.props.options_operation === 'view' ?  options_addition : '';
+      var list_options = this.props.options_length === 0 ?  '' : options_list;
+    }
     return(
       <div>
         { display_question }
