@@ -230,10 +230,11 @@ class App extends Component {
   }
 
   handleOptionsAddition(options_text) {
+    var option_add = this.state.question_list;
     if(this.state.view_operation === 'off'){
       var options_update = this.state.question_text;
     }else{
-      var options_update = this.state.question_list[this.state.view_index];
+      var options_update = option_add[this.state.view_index];
     }
     const newItem = {
       text: this.state.options_text,
@@ -243,6 +244,8 @@ class App extends Component {
     options_update.options = options_update.options.concat(newItem);
     if(this.state.view_operation === 'off'){
       this.setState({question_text: options_update});
+    }else{
+      this.setState({question_list: option_add});
     }
     var options_length = this.state.options_length + 1;
     this.setState({options_length: options_length});
@@ -301,10 +304,8 @@ class App extends Component {
     question_length = question_length - 1;
     this.setState({question_length: question_length});
     this.setState({question_list: question_update});
-    this.setState({view_operation: 'on'});
     this.setState({question_operation: 'view'});
     this.setState({options_operation: 'view'});
-    localStorage.setItem( 'items', JSON.stringify(this.state.question_list));
   }
 
   render() {
