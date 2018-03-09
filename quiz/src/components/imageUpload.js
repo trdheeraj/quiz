@@ -39,13 +39,11 @@ class ImageUpload extends Component {
           <tbody>
             <tr>
               <td>
-                <input type="file" onClick={this._handleImageChange} text="Add Image"/>
+                <input type="file" onChange={this._handleImageChange} />
               </td>
             </tr>
             <tr>
-              <td>
-                {$imagePreview}
-              </td>
+              {$imagePreview}
             </tr>
           </tbody>
         </table>

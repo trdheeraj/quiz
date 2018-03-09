@@ -202,7 +202,9 @@ class App extends Component {
     const newItem = {
       text: question_text,
       id: Date.now(),
-      options: []
+      options: [],
+      file: '',
+      imagePreviewUrl: ''
     };
     this.setState({question_text: newItem});
   }
@@ -229,7 +231,9 @@ class App extends Component {
     const newItem = {
       text: 'New Question ' + question_length,
       id: Date.now(),
-      options: []
+      options: [],
+      file: '',
+      imagePreviewUrl: ''
     };
     this.setState({question_text: newItem});
     this.setState({question_operation: 'Add', question_length: question_length});
