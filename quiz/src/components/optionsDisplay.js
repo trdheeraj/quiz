@@ -21,13 +21,25 @@ class OptionsDisplay extends Component {
   }
 
   render() {
+    var option_length = this.props.options_list.options.length + 1;
     return (
       <ol>
         {this.props.options_list.options.map(question_list => (
         	<div>
-	          <span> Options </span>
-	      		<input type="text" onClick={() => this.handleChange(question_list.id)} key={question_list.id} defaultValue={question_list.text} onBlur={this.handler} />
-            <button onClick={() => this.handleRemove(question_list.id)} className="small">-</button>
+            <table>
+              <tr>
+                <td style={{ width: '5%'}}>
+                  <span> {'Options' + (option_length - this.props.options_list.options.length)} </span>
+                  <input type="hidden" value={option_length = option_length + 1} />
+                </td>
+                <td style={{ width: '20%' }}>
+	      		      <input type="text" onClick={() => this.handleChange(question_list.id)} key={question_list.id} defaultValue={question_list.text} onBlur={this.handler} />
+                </td>
+                <td style = {{ width: '10%'}}>
+                  <input type="button" onClick={() => this.handleRemove(question_list.id)} value="-"/>
+                </td>
+              </tr>
+            </table>
 	      	</div>
         ))}
       </ol>

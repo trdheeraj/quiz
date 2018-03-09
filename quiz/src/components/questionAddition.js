@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUpload from './imageUpload';
 
 class QuestionAddition extends Component {
   constructor(props) {
@@ -15,9 +16,19 @@ class QuestionAddition extends Component {
   		return '';
   	}
     return (
-      <div>
-      	<span> Question </span>
-      	<input type="text" key={this.props.question_text.id} defaultValue={this.props.question_text.text} onBlur={ this.handleChange } />
+      <div> 
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                Question : <input type="text" key={this.props.question_text.id} defaultValue={this.props.question_text.text} onBlur={ this.handleChange } />  
+              </td>
+            </tr>
+            <tr>
+              <ImageUpload />
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   }

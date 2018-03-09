@@ -19,8 +19,25 @@ class TodoApp extends React.Component {
   }
 
   render() {
-    var heading = this.props.operation_heading === 0 ? <h3> Add your questions </h3> : <h3> Select your questions </h3>;
+    var heading = this.props.operation_heading === 0 ? <h4> Add your questions </h4> : <h4> Select your questions </h4>;
     var display_question_list = this.props.question_list.length === 0 ? '' : <QuestionList question_list={this.props.question_list} view_question={this.handleViewOperation} delete_question={this.handleRemove} />;
+    var disable_question_addition = true;
+    if(this.props.first_question){
+      disable_question_addition = false;
+    }else{
+      if(this.props.enable_ques_addition){
+        disable_question_addition = false;
+        if(this.props.question_list[this.props.view_index].options.length >= 2){
+          disable_question_addition = false;
+        }else{
+          disable_question_addition = true;
+        }
+      }else if(this.props.options_length >= 2){
+        disable_question_addition = false;
+      }else{
+        disable_question_addition = true;
+      }
+    }
     return (
       <div>
         { heading }
@@ -29,6 +46,7 @@ class TodoApp extends React.Component {
           type="button"
           value="Add"
           onClick={this.handleSubmit}
+          disabled = {disable_question_addition}
         />
         <input
           type="button"
@@ -106,6 +124,15 @@ class QuestionDesign extends Component {
     var display_question = this.props.question_operation === 'Add' ?  question_addition : '';
     var display_options = this.props.options_operation === 'Add' ?  options_addition : '';
     var list_options = this.props.options_length === 0 ?  '' : options_list;
+    var disable_option_addition = this.props.options_length === 6 ? 'disabled' : 'show'
+    var disabled = false;
+    var disable_option_first = this.props.disable_option_addition;
+    if(disable_option_addition === 'disabled'){
+      disabled = true;
+    }else{
+      disabled = false;
+      if(disable_option_first) disabled = true;
+    }
     return(
       <div>
         { display_question }
@@ -114,13 +141,9 @@ class QuestionDesign extends Component {
         <input
           type="button"
           value="Add"
+          id="Option"
           onClick={this.handleOptionsAddition}
-        />
-        <input
-          type="button"
-          value="Delete"
-          onClick={this.handleSubmit}
-          disabled
+          disabled={disabled}
         />
       </div>
     );
@@ -141,7 +164,10 @@ class App extends Component {
       view_operation: '',
       view_index: 0,
       option_id: 0,
-      question_length: 1
+      question_length: 1,
+      disable_option_addition: true,
+      first_question: true,
+      enable_ques_addition: false
 
     };
     this.handleQuestionChange = this.handleQuestionChange.bind(this);
@@ -208,7 +234,7 @@ class App extends Component {
     this.setState({question_text: newItem});
     this.setState({question_operation: 'Add', question_length: question_length});
     this.setState({options_operation: 'Add'});
-    this.setState({view_operation: 'off'});
+    this.setState({view_operation: 'off', disable_option_addition: false, options_length: 0, first_question: false, enable_ques_addition: false});
   }
 
   handleOptionsChange(options_text){
@@ -226,7 +252,7 @@ class App extends Component {
     this.setState({view_index: index});
     this.setState({view_operation: 'on'});
     this.setState({question_operation: 'view'});
-    this.setState({options_operation: 'view'});
+    this.setState({options_operation: 'view', enable_ques_addition: true});
   }
 
   handleOptionsAddition(options_text) {
@@ -240,7 +266,6 @@ class App extends Component {
       text: this.state.options_text,
       id: Date.now()
     };
-    this.setState({view_operation: 'off'});
     options_update.options = options_update.options.concat(newItem);
     if(this.state.view_operation === 'off'){
       this.setState({question_text: options_update});
@@ -284,9 +309,11 @@ class App extends Component {
     }
     if(update === 1){
       options_update.splice(index, 1);
+      this.state.options_length--;
       this.setState({question_list: question_update});
     }else{
       options_update.splice(index, 1);
+      this.state.options_length--;
       this.setState({question_text: question_update});
     }
   }
@@ -299,6 +326,7 @@ class App extends Component {
         break;
       }
     }
+    this.setState({view_index: 0});
     var question_length = this.state.question_length;
     question_update.splice(index, 1);
     question_length = question_length - 1;
@@ -306,26 +334,30 @@ class App extends Component {
     this.setState({question_list: question_update});
     this.setState({question_operation: 'view'});
     this.setState({options_operation: 'view'});
+    this.setState({view_operation: 'on'});
+    if(this.state.question_list.length === 0){
+      this.setState({first_question: true, disable_option_addition: true});
+    }
   }
 
   render() {
-    var display_view_question = <ViewQuestionDesign
-                                  operation_heading = { this.state.operation_heading }
-                                  question_list = { this.state.question_list }
-                                  operationChange = { this.handleQuestionChange }
-                                  option_change = { this.handleOptionsChange }
-                                  options_addition = { this.handleOptionsAddition }
-                                  question_operation = { this.state.question_operation }
-                                  options_operation = { this.state.options_operation }
-                                  options_list = { this.state.question_list[this.state.view_index] } 
-                                  options_text = { this.state.options_text }
-                                  options_length = { this.state.options_length }
-                                  question_update = { this.handleQuestionUpdation }
-                                  options_update = { this.handleOptionsUpdation }
-                                  option_id = {this.handleOptionId}
-                                  delete_options = {this.handleOptionDeletion}
-                                />;
-
+    if(this.state.question_list.length > 0){
+      var display_view_question = <ViewQuestionDesign
+                                    operation_heading = { this.state.operation_heading }
+                                    question_list = { this.state.question_list }
+                                    operationChange = { this.handleQuestionChange }
+                                    option_change = { this.handleOptionsChange }
+                                    options_addition = { this.handleOptionsAddition }
+                                    question_operation = { this.state.question_operation }
+                                    options_operation = { this.state.options_operation }
+                                    options_list = { this.state.question_list[this.state.view_index] } 
+                                    options_text = { this.state.options_text }
+                                    question_update = { this.handleQuestionUpdation }
+                                    options_update = { this.handleOptionsUpdation }
+                                    option_id = {this.handleOptionId}
+                                    delete_options = {this.handleOptionDeletion}
+                                  />;
+    }
     var display_question = <QuestionDesign
                               operation_heading = { this.state.operation_heading }
                               question_list = { this.state.question_list }
@@ -340,26 +372,35 @@ class App extends Component {
                               options_update = { this.handleOptionsUpdation }
                               option_id = {this.handleOptionId}
                               delete_options = {this.handleOptionDeletion}
+                              disable_option_addition = {this.state.disable_option_addition}
                             />;
     var view_question = this.state.view_operation === 'on' ?  display_view_question : display_question;
     return (
       <div className="App">
-        <div className="container-fluid">
-          <div className="row-fluid">
-            <div className="span4">
-              <TodoApp 
-                operation_heading = { this.state.operation_heading }
-                question_list = { this.state.question_list }
-                operationChange = { this.handleOperationChange }
-                view_question = { this.handleViewOperation }
-                delete_question = { this.handleQuestionDeletion }
-              />
-            </div>
-            <div className="span8">
-              {view_question}
-            </div>
-          </div>
-        </div>
+        <table align="center">
+          <tr>
+              <td id="col1">
+                <div>
+                  <TodoApp 
+                    operation_heading = { this.state.operation_heading }
+                    question_list = { this.state.question_list }
+                    operationChange = { this.handleOperationChange }
+                    view_question = { this.handleViewOperation }
+                    delete_question = { this.handleQuestionDeletion }
+                    options_length = { this.state.options_length }
+                    first_question = { this.state.first_question }
+                    enable_ques_addition = { this.state.enable_ques_addition }
+                    view_index = {this.state.view_index}
+                  />
+                </div>
+              </td>
+              <td id="col2">
+                <div>
+                  {view_question}
+                </div>
+              </td>
+            </tr>
+        </table>
       </div>
     );
   }

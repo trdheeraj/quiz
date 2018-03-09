@@ -23,8 +23,16 @@ class QuestionList extends Component {
       <ol>
         {this.props.question_list.map(question_list => (
           <div>
-            <li style={{'textAlign': 'left'}} onClick={() => this.handler(question_list.id)} key={question_list.id}>{question_list.text}</li>
-            <button style={{'textAlign': 'right'}} onClick={() => this.handleRemove(question_list.id)} className="small">-</button>
+            <table>
+              <tr>
+                <td style={{ width: '50%'}}>
+                  <li style={{'textAlign': 'center'}} onClick={() => this.handler(question_list.id)} key={question_list.id}>{question_list.text}</li>
+                </td>
+                <td style={{ width: '20%'}}>
+                  <input type="button" onClick={() => this.handleRemove(question_list.id)} value="-" />
+                </td>
+              </tr>
+            </table>
           </div>
         ))}
       </ol>

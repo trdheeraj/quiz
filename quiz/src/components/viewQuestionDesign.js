@@ -48,6 +48,7 @@ class ViewQuestionDesign extends Component {
     var options_addition = <OptionAddition
       options_addition = { this.handleOptionsChange }
       options_text = { this.props.options_text }
+      options_length = { this.props.options_list.options.length }
     />;
     var options_list = <OptionsDisplay
       options_list = {this.props.options_list}
@@ -58,7 +59,14 @@ class ViewQuestionDesign extends Component {
     if(this.props.question_list.length > 0){
       var display_question = this.props.question_operation === 'view' ?  question_addition : '';
       var display_options = this.props.options_operation === 'view' ?  options_addition : '';
-      var list_options = this.props.options_length === 0 ?  '' : options_list;
+      var list_options = this.props.options_list.options.length === 0 ?  '' : options_list;
+    }
+    var disable_option_addition = this.props.options_list.options.length === 6 ? 'disabled' : 'show'
+    var disabled = false;
+    if(disable_option_addition === 'disabled'){
+      disabled = true;
+    }else{
+      disabled = false;
     }
     return(
       <div>
@@ -69,11 +77,7 @@ class ViewQuestionDesign extends Component {
           type="button"
           value="Add"
           onClick={this.handleOptionsAddition}
-        />
-        <input
-          type="button"
-          value="Delete"
-          onClick={this.handleSubmit}
+          disabled={disabled}
         />
       </div>
     );
