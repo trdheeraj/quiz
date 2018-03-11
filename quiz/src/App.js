@@ -77,6 +77,8 @@ class QuestionDesign extends Component {
     this.handleOptionDeletion = this.handleOptionDeletion.bind(this);
     this.handleOptionsUpdation = this.handleOptionsUpdation.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleFileAddition = this.handleFileAddition.bind(this);
+    this.handleImageDisplay = this.handleImageDisplay.bind(this);
   }
 
   handleOperationChange(operation_heading) {
@@ -103,12 +105,25 @@ class QuestionDesign extends Component {
     this.props.options_update(options_text);
   }
 
+  handleFileAddition(file){
+    this.props.file_addition(file);
+  }
+
+  handleImageDisplay(e){
+    this.props.display_image(e);
+  }
+
   render(){
     var question_addition = <QuestionAddition
       operation_heading = { this.props.operation_heading }
       question_number = { this.props.question_list.length + 1 }
       question_creation = { this.handleOperationChange }
       question_text = {this.props.options_list}
+      file_addition = {this.handleFileAddition}
+      display_image = {this.handleImageDisplay}
+      show_image = {this.props.show_image}
+      display_no_image= {this.props.display_no_image}
+      toggle_display_no_image = {this.props.toggle_display_no_image}
     />;
     var options_addition = <OptionAddition
       options_addition = { this.handleOptionsChange }
@@ -167,8 +182,9 @@ class App extends Component {
       question_length: 1,
       disable_option_addition: true,
       first_question: true,
-      enable_ques_addition: false
-
+      enable_ques_addition: false,
+      display_image: true,
+      display_no_image: true
     };
     this.handleQuestionChange = this.handleQuestionChange.bind(this);
     this.handleOperationChange = this.handleOperationChange.bind(this);
@@ -180,6 +196,13 @@ class App extends Component {
     this.handleOptionId = this.handleOptionId.bind(this);
     this.handleOptionDeletion = this.handleOptionDeletion.bind(this);
     this.handleQuestionDeletion = this.handleQuestionDeletion.bind(this);
+    this.handleFileAddition = this.handleFileAddition.bind(this);
+    this.handleImageDisplay = this.handleImageDisplay.bind(this);
+    this.toggle_display_no_image = this.toggle_display_no_image.bind(this);
+  }
+
+  toggle_display_no_image(){
+    this.setState({display_no_image: false});
   }
 
   handleOptionId(index){
@@ -203,8 +226,7 @@ class App extends Component {
       text: question_text,
       id: Date.now(),
       options: [],
-      file: '',
-      imagePreviewUrl: ''
+      image: []
     };
     this.setState({question_text: newItem});
   }
@@ -232,13 +254,17 @@ class App extends Component {
       text: 'New Question ' + question_length,
       id: Date.now(),
       options: [],
-      file: '',
-      imagePreviewUrl: ''
+      image: []
     };
     this.setState({question_text: newItem});
     this.setState({question_operation: 'Add', question_length: question_length});
-    this.setState({options_operation: 'Add'});
+    this.setState({options_operation: 'Add', display_no_image: true});
     this.setState({view_operation: 'off', disable_option_addition: false, options_length: 0, first_question: false, enable_ques_addition: false});
+    if(this.state.first_question === false){
+      if(this.state.view_operation === 'off' && this.state.display_image === false){
+        document.getElementById('file_preview').removeAttribute('src');
+      } 
+    }
   }
 
   handleOptionsChange(options_text){
@@ -257,6 +283,13 @@ class App extends Component {
     this.setState({view_operation: 'on'});
     this.setState({question_operation: 'view'});
     this.setState({options_operation: 'view', enable_ques_addition: true});
+    if(this.state.display_image === false){
+      document.getElementById('file_preview').removeAttribute('src');
+    }
+  }
+
+  handleImageDisplay(e){
+    this.setState({display_image: true});
   }
 
   handleOptionsAddition(options_text) {
@@ -279,6 +312,33 @@ class App extends Component {
     var options_length = this.state.options_length + 1;
     this.setState({options_length: options_length});
     this.setState({options_text: ''});
+  }
+
+  handleFileAddition(file){
+    var option_add = this.state.question_list;
+    if(this.state.view_operation === 'off'){
+      var options_update = this.state.question_text;
+    }else{
+      var options_update = option_add[this.state.view_index];
+    }
+    let reader = new FileReader();
+
+    const newItem = {
+      file: file
+    };
+    options_update.image = newItem;
+
+    if(this.state.view_operation === 'off'){
+      this.setState({question_text: options_update});
+    }else{
+      this.setState({question_list: option_add});
+    }
+    if(typeof file == 'undefined'){
+      this.setState({display_no_image: true});
+      if(this.state.view_operation === 'on'){
+        document.getElementById('file_preview').removeAttribute('src');
+      }
+    }
   }
 
   handleOptionsUpdation(options_text){
@@ -360,6 +420,9 @@ class App extends Component {
                                     options_update = { this.handleOptionsUpdation }
                                     option_id = {this.handleOptionId}
                                     delete_options = {this.handleOptionDeletion}
+                                    file_addition = {this.handleFileAddition}
+                                    display_image = {this.handleImageDisplay}
+                                    toggle_display_no_image = {this.toggle_display_no_image}
                                   />;
     }
     var display_question = <QuestionDesign
@@ -377,6 +440,11 @@ class App extends Component {
                               option_id = {this.handleOptionId}
                               delete_options = {this.handleOptionDeletion}
                               disable_option_addition = {this.state.disable_option_addition}
+                              file_addition = {this.handleFileAddition}
+                              display_image = {this.handleImageDisplay}
+                              show_image = {this.state.display_image}
+                              display_no_image= {this.state.display_no_image}
+                              toggle_display_no_image = {this.toggle_display_no_image}
                             />;
     var view_question = this.state.view_operation === 'on' ?  display_view_question : display_question;
     return (

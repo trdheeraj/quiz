@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class ImageUpload extends Component {
+class ImageDisplay extends Component {
   constructor(props) {
     super(props);
     this._handleImageChange = this._handleImageChange.bind(this);
@@ -18,14 +18,22 @@ class ImageUpload extends Component {
     if(typeof file != 'undefined'){
       this.props.toggle_display_no_image();
       reader.readAsDataURL(file)
-    }else{
-      this.props.display_image();
     }
     this.props.file_addition(file);
   }
 
   render() {
-    var display_image = this.props.show_image && this.props.display_no_image === false ? <img id='file_preview' /> : ''
+    let file = this.props.file_preview;
+    var reader = new FileReader();
+    var output = '';
+    reader.onload = function(){
+      output = document.getElementById('file_preview');
+      output.src = URL.createObjectURL(file);
+    };
+    if(typeof file != 'undefined'){
+      reader.readAsDataURL(file)
+    }
+    var display_image = typeof file != 'undefined' ? <img id='file_preview' /> : '';
     return (
       <table>
         <tbody>
@@ -46,4 +54,4 @@ class ImageUpload extends Component {
 
 }
 
-export default ImageUpload;
+export default ImageDisplay;

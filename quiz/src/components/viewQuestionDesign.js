@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import OptionsDisplay from './optionsDisplay';
 import OptionAddition from './optionAddition';
 import QuestionUpdation from './questionUpdation';
+import ImageDisplay from './imageDisplay';
 
 // Module is to display the question and answer options for the selected question
 class ViewQuestionDesign extends Component {
@@ -13,6 +14,7 @@ class ViewQuestionDesign extends Component {
     this.handleOptionsUpdation = this.handleOptionsUpdation.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleOptionDeletion = this.handleOptionDeletion.bind(this);
+    this.handleFileAddition = this.handleFileAddition.bind(this);
   }
 
   handleOptionsAddition(e) {
@@ -37,6 +39,10 @@ class ViewQuestionDesign extends Component {
 
   handleOptionDeletion(index){
     this.props.delete_options(index);
+  }
+
+  handleFileAddition(file){
+    this.props.file_addition(file);
   }
 
   render(){
@@ -71,6 +77,11 @@ class ViewQuestionDesign extends Component {
     return(
       <div>
         { display_question }
+        <ImageDisplay
+          file_addition={this.handleFileAddition}
+          file_preview={this.props.options_list.image.file}
+          toggle_display_no_image = {this.props.toggle_display_no_image}
+        />
         { list_options }
         { display_options }
         <input
