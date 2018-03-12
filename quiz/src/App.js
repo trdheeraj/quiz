@@ -295,10 +295,11 @@ class App extends Component {
 
   handleOptionsAddition(options_text) {
     var option_add = this.state.question_list;
+    var options_update = '';
     if(this.state.view_operation === 'off'){
-      var options_update = this.state.question_text;
+      options_update = this.state.question_text;
     }else{
-      var options_update = option_add[this.state.view_index];
+      options_update = option_add[this.state.view_index];
     }
     const newItem = {
       text: this.state.options_text,
@@ -317,13 +318,12 @@ class App extends Component {
 
   handleFileAddition(file){
     var option_add = this.state.question_list;
+    var options_update = '';
     if(this.state.view_operation === 'off'){
-      var options_update = this.state.question_text;
+      options_update = this.state.question_text;
     }else{
-      var options_update = option_add[this.state.view_index];
+      options_update = option_add[this.state.view_index];
     }
-    let reader = new FileReader();
-
     const newItem = {
       file: file
     };
@@ -334,7 +334,7 @@ class App extends Component {
     }else{
       this.setState({question_list: option_add});
     }
-    if(typeof file == 'undefined'){
+    if(typeof file === 'undefined'){
       this.setState({display_no_image: true});
       if(this.state.view_operation === 'on'){
         document.getElementById('file_preview').removeAttribute('src');
@@ -343,11 +343,12 @@ class App extends Component {
   }
 
   handleOptionsUpdation(options_text){
+    var options_update = '';
     if(this.state.view_operation === 'off'){
-      var options_update = this.state.question_text.options;
+      options_update = this.state.question_text.options;
       options_update[this.state.option_id].text = options_text;
     }else{
-      var options_update = this.state.question_list[this.state.view_index].options;
+      options_update = this.state.question_list[this.state.view_index].options;
       options_update[this.state.option_id].text = options_text;
       this.setState({question_text: options_update});
     }
@@ -358,12 +359,14 @@ class App extends Component {
 
   handleOptionDeletion(index){
     var update = 0;
+    var question_update = '';
+    var options_update = '';
     if(this.state.view_operation === 'off'){
-      var question_update = this.state.question_text;
-      var options_update = question_update.options;
+      question_update = this.state.question_text;
+      options_update = question_update.options;
     }else{
-      var question_update = this.state.question_list;
-      var options_update = question_update[this.state.view_index].options;  
+      question_update = this.state.question_list;
+      options_update = question_update[this.state.view_index].options;  
       update = 1;
     }
     for (var i = 0; i < options_update.length; i++) {
@@ -374,11 +377,11 @@ class App extends Component {
     }
     if(update === 1){
       options_update.splice(index, 1);
-      this.state.options_length--;
+      this.setState({options_length: this.state.options_length--});
       this.setState({question_list: question_update});
     }else{
       options_update.splice(index, 1);
-      this.state.options_length--;
+      this.setState({options_length: this.state.options_length--});
       this.setState({question_text: question_update});
     }
   }
@@ -451,28 +454,30 @@ class App extends Component {
     return (
       <div className="App">
         <table align="center">
-          <tr>
-              <td id="col1">
-                <div>
-                  <TodoApp 
-                    operation_heading = { this.state.operation_heading }
-                    question_list = { this.state.question_list }
-                    operationChange = { this.handleOperationChange }
-                    view_question = { this.handleViewOperation }
-                    delete_question = { this.handleQuestionDeletion }
-                    options_length = { this.state.options_length }
-                    first_question = { this.state.first_question }
-                    enable_ques_addition = { this.state.enable_ques_addition }
-                    view_index = {this.state.view_index}
-                  />
-                </div>
-              </td>
-              <td id="col2">
-                <div>
-                  {view_question}
-                </div>
-              </td>
-            </tr>
+          <tbody>
+            <tr>
+                <td id="col1">
+                  <div>
+                    <TodoApp 
+                      operation_heading = { this.state.operation_heading }
+                      question_list = { this.state.question_list }
+                      operationChange = { this.handleOperationChange }
+                      view_question = { this.handleViewOperation }
+                      delete_question = { this.handleQuestionDeletion }
+                      options_length = { this.state.options_length }
+                      first_question = { this.state.first_question }
+                      enable_ques_addition = { this.state.enable_ques_addition }
+                      view_index = {this.state.view_index}
+                    />
+                  </div>
+                </td>
+                <td id="col2">
+                  <div>
+                    {view_question}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
         </table>
       </div>
     );

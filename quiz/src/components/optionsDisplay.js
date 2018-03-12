@@ -29,7 +29,7 @@ class OptionsDisplay extends Component {
             <table>
               <tr>
                 <td style={{ width: '5%'}}>
-                  <span> {'Options' + (option_length - this.props.options_list.options.length)} </span>
+                  <span> {'Option ' + (option_length - this.props.options_list.options.length)} </span>
                   <input type="hidden" value={option_length = option_length + 1} />
                 </td>
                 <td style={{ width: '20%' }}>
