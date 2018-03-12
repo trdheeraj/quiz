@@ -15,7 +15,7 @@ class ImageUpload extends Component {
       output = document.getElementById('file_preview');
       output.src = URL.createObjectURL(file);
     };
-    if(typeof file != 'undefined'){
+    if(typeof file !== 'undefined'){
       this.props.toggle_display_no_image();
       reader.readAsDataURL(file)
     }else{
@@ -25,14 +25,14 @@ class ImageUpload extends Component {
   }
 
   render() {
-    var display_image = this.props.show_image && this.props.display_no_image === false ? <img id='file_preview' /> : ''
+    var display_image = this.props.show_image && this.props.display_no_image === false ? <img id='file_preview' alt="Not Selected" /> : ''
     return (
       <table>
         <tbody>
           <tr>
             <td>
-              <div class="fileUpload btn btn-success">
-                Add Image <input type="file" class="upload" accept=".png, .jpg, .jpeg" onChange={this._handleImageChange}/>
+              <div className="fileUpload btn btn-success">
+                Add Image <input type="file" className="upload" accept=".png, .jpg, .jpeg" onChange={this._handleImageChange} />
               </div>
             </td>
           </tr>

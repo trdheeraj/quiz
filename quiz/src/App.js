@@ -206,11 +206,12 @@ class App extends Component {
   }
 
   handleOptionId(index){
+    var a = '';
     if(this.state.view_operation === 'off'){
       var current_question = this.state.question_text;
-      var a = current_question.options;
+      a = current_question.options;
     }else{
-      var a = this.state.question_list[this.state.view_index].options;
+      a = this.state.question_list[this.state.view_index].options;
     }
     for (var i = 0; i < a.length; i++) {
       if(a[i]['id'] === index){

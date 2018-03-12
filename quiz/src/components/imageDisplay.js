@@ -15,7 +15,7 @@ class ImageDisplay extends Component {
       output = document.getElementById('file_preview');
       output.src = URL.createObjectURL(file);
     };
-    if(typeof file != 'undefined'){
+    if(typeof file !== 'undefined'){
       this.props.toggle_display_no_image();
       reader.readAsDataURL(file)
     }
@@ -30,10 +30,10 @@ class ImageDisplay extends Component {
       output = document.getElementById('file_preview');
       output.src = URL.createObjectURL(file);
     };
-    if(typeof file != 'undefined'){
+    if(typeof file !== 'undefined'){
       reader.readAsDataURL(file)
     }
-    var display_image = typeof file != 'undefined' ? <img id='file_preview' /> : '';
+    var display_image = typeof file !== 'undefined' ? <img id='file_preview' alt="Not Selected" /> : '';
     return (
       <table>
         <tbody>
