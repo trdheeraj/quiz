@@ -377,11 +377,11 @@ class App extends Component {
     }
     if(update === 1){
       options_update.splice(index, 1);
-      this.setState({options_length: this.state.options_length--});
+      this.state.options_length--;
       this.setState({question_list: question_update});
     }else{
       options_update.splice(index, 1);
-      this.setState({options_length: this.state.options_length--});
+      this.state.options_length--;
       this.setState({question_text: question_update});
     }
   }
